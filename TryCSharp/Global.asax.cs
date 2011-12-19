@@ -22,9 +22,21 @@ namespace TryCSharp
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
+              "LogOn", // Route name
+              "Account/LogOn", // URL with parameters
+              new { controller = "Account", action = "LogOn"} // Parameter defaults
+              );
+
+            routes.MapRoute(
+                "Normal", // Route name
+                "{controller}/{action}/{sid}", // URL with parameters
+                new {controller = "Home"} // Parameter defaults
+                );
+
+               routes.MapRoute(
                 "Default", // Route name
-                "{controller}/{action}/{id}", // URL with parameters
-                new { controller = "Home", action = "Index", id = UrlParameter.Optional } // Parameter defaults
+                "{sid}", // URL with parameters
+                new { controller = "Home", action = "Index", sid = UrlParameter.Optional} // Parameter defaults
             );
 
         }

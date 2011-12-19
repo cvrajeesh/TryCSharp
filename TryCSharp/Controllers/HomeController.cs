@@ -8,22 +8,28 @@ using Roslyn.Scripting.CSharp;
 
 namespace TryCSharp.Controllers
 {
+    [Authorize]
+    [RequireUserSession]
     public class HomeController : Controller
     {
-        public ActionResult Index()
+        public ActionResult Index(string sid)
         {
-            var se = new ScriptEngine();
-            var session = Roslyn.Scripting.Session.Create();
-            se.Execute("using System; using System.IO;", session);
-            var oldOut = Console.Out;
-            var sw = new StringWriter();
-            Console.SetOut(sw);
-            se.Execute("Console.WriteLine(\"Rajeesh\");", session);
-            ViewBag.Message = sw.ToString();
-            Console.SetOut(oldOut);
-
             return View();
         }
+
+        [HttpPost]
+        public ActionResult Index(string sid, string statement)
+        {
+            var se = new ScriptExecutionService();
+            var result = se.Execute(sid, statement);
+            if (string.IsNullOrEmpty(result))
+            {
+                return Content("Executed...");
+            }
+
+            return Content(result);
+        }
+       
 
         public ActionResult About()
         {
@@ -31,12 +37,6 @@ namespace TryCSharp.Controllers
 
             return View();
         }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your quintessential contact page.";
-
-            return View();
-        }
     }
+
 }
